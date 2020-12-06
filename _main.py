@@ -80,8 +80,8 @@ def main():
                     drone.send_command("attitude?")
             #UDP通信
             result = str(name)
-            # print(result)
-            # client.sendto(result.encode('utf-8'),(HOST,PORT))
+            print(result)
+            client.sendto(result.encode('utf-8'),(HOST,PORT))
 
 
             time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
