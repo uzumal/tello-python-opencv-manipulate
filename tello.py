@@ -9,7 +9,7 @@ import numpy as np      # 画像データの配列用
 class Tello:
     """Telloドローンと通信するラッパークラス"""
 
-    def __init__(self, local_ip, local_port, imperial=False, command_timeout=.3, tello_ip='172.20.70.26', tello_port=8889):
+    def __init__(self, local_ip, local_port, imperial=False, command_timeout=.3, tello_ip='172.20.70.20', tello_port=8889):
         """
         クラスの初期化．ローカルのIP/ポートをバインドし，Telloをコマンドモードにする．
 
@@ -161,7 +161,6 @@ class Tello:
 
         self.response = None    # _receive_threadスレッドが次の応答を入れてくれるので，ここでは空にしておく
 
-        print("return" + response)
         return response     # 今回の応答データを返す
 
     def set_abort_flag(self):

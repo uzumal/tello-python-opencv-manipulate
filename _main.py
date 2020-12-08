@@ -5,12 +5,14 @@ import time           # time.sleepを使いたいので
 from kbhit import *   # kbhit.pyをインポート
 import socket
 
-HOST = '172.20.70.39'
+# HOST = '172.20.70.25'
+HOST = '127.0.0.1'
 PORT = 4602
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 name = "null"
+
 # メイン関数本体
 def main():
     # kbhitのためのおまじない
@@ -18,6 +20,7 @@ def main():
     set_curses_term()
 
     global name
+    pre_name = "null"
 
     # Telloクラスを使って，droneというインスタンス(実体)を作る
     drone = tello.Tello('', 8889) 
@@ -29,19 +32,22 @@ def main():
     try:
         while True:
             name = "null"
-            # frame = drone.read()
-            # if frame is None or frame.size == 0:    # 中身がおかしかったら無視
-            #     continue 
-            # # (B)ここから画像処理
-            # image = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)      # OpenCV用のカラー並びに変換する
-            # small_image = cv2.resize(image, dsize=(480,360) )   # 画像サイズを半分に変更
-            # # (X)ウィンドウに表示
-            # cv2.imshow('OpenCV Window', small_image)    # ウィンドウに表示するイメージを変えれば色々表示できる
 
-            #　キー操作
+            # 5秒おきに'command'を送って、Telloが自動終了しないようにする
+            current_time = time.time()  # 現在時刻を取得
+            if current_time - pre_time > 2.0 :  # 前回時刻から5秒以上経過しているか？
+                pre_name = drone.send_command('attitude?')   # 'command'送信
+                if len(pre_name) > 13:
+                    name = pre_name
+                time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
+                pre_name = drone.send_command('command')   # 'command'送信
+                if len(pre_name) > 13:
+                    name = pre_name
+                pre_time = current_time         # 前回時刻を更新
+                print(name)
+
             if kbhit():     # 何かキーが押されるのを待つ
                 key = getch()   # 1文字取得
-
                 # キーに応じた処理
                 if key == 't':      # 離陸
                     name = 'takeoff'
@@ -74,23 +80,16 @@ def main():
                 elif key == 'f':    # 下降
                     name = 'down'
                     drone.move_down(0.3)
-                elif key == 'b':
-                    drone.send_command("speed?")
-                elif key == 'n':
-                    drone.send_command("attitude?")
+                elif key == 'n':    #stop
+                    client.close()
+            
             #UDP通信
             result = str(name)
-            print(result)
+            # print(result)
             client.sendto(result.encode('utf-8'),(HOST,PORT))
 
-
             time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
-
-            # 5秒おきに'command'を送って、Telloが自動終了しないようにする
-            current_time = time.time()  # 現在時刻を取得
-            if current_time - pre_time > 5.0 :  # 前回時刻から5秒以上経過しているか？
-                drone.send_command('command')   # 'command'送信
-                pre_time = current_time         # 前回時刻を更新
+            
 
     except( KeyboardInterrupt, SystemExit):    # Ctrl+cが押されたら離脱
         print( "SIGINTを検知" )
