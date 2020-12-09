@@ -5,8 +5,8 @@ import time           # time.sleepを使いたいので
 from kbhit import *   # kbhit.pyをインポート
 import socket
 
-# HOST = '172.20.70.25'
-HOST = '127.0.0.1'
+HOST = '172.20.70.22'
+# HOST = '127.0.0.1'
 PORT = 4602
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -35,16 +35,16 @@ def main():
 
             # 5秒おきに'command'を送って、Telloが自動終了しないようにする
             current_time = time.time()  # 現在時刻を取得
-            if current_time - pre_time > 2.0 :  # 前回時刻から5秒以上経過しているか？
-                pre_name = drone.send_command('attitude?')   # 'command'送信
-                if len(pre_name) > 13:
-                    name = pre_name
-                time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
-                pre_name = drone.send_command('command')   # 'command'送信
-                if len(pre_name) > 13:
-                    name = pre_name
-                pre_time = current_time         # 前回時刻を更新
-                print(name)
+            # if current_time - pre_time > 1.0 :  # 前回時刻から5秒以上経過しているか？
+            pre_name = drone.send_command('attitude?')   # 'command'送信
+            if len(pre_name) > 13:
+                name = pre_name
+            time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
+            pre_name = drone.send_command('command')   # 'command'送信
+            if len(pre_name) > 13:
+                name = pre_name
+            pre_time = current_time         # 前回時刻を更新
+            print(name)
 
             if kbhit():     # 何かキーが押されるのを待つ
                 key = getch()   # 1文字取得
@@ -88,7 +88,7 @@ def main():
             # print(result)
             client.sendto(result.encode('utf-8'),(HOST,PORT))
 
-            time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
+            # time.sleep(0.3) # 適度にウェイトを入れてCPU負荷を下げる
             
 
     except( KeyboardInterrupt, SystemExit):    # Ctrl+cが押されたら離脱
