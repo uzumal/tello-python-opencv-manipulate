@@ -5,7 +5,9 @@ import time           # time.sleepを使いたいので
 from kbhit import *   # kbhit.pyをインポート
 import socket
 
-HOST = '172.20.70.22'
+HOST = '172.20.72.28'
+# HOST = '172.20.71.48'
+# HOST = '192.168.10.100'
 # HOST = '127.0.0.1'
 PORT = 4602
 
@@ -44,7 +46,6 @@ def main():
             if len(pre_name) > 13:
                 name = pre_name
             pre_time = current_time         # 前回時刻を更新
-            print(name)
 
             if kbhit():     # 何かキーが押されるのを待つ
                 key = getch()   # 1文字取得
@@ -85,6 +86,7 @@ def main():
             
             #UDP通信
             result = str(name)
+            print(name)
             # print(result)
             client.sendto(result.encode('utf-8'),(HOST,PORT))
 

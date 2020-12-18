@@ -9,7 +9,7 @@ import numpy as np      # 画像データの配列用
 class Tello:
     """Telloドローンと通信するラッパークラス"""
 
-    def __init__(self, local_ip, local_port, imperial=False, command_timeout=.3, tello_ip='172.20.70.23', tello_port=8889):
+    def __init__(self, local_ip, local_port, imperial=False, command_timeout=.3, tello_ip='172.20.72.33', tello_port=8889):
         """
         クラスの初期化．ローカルのIP/ポートをバインドし，Telloをコマンドモードにする．
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import tello            # tello.pyをインポート
+import tello_video    # tello.pyをインポート
 import time           # time.sleepを使いたいので
 from kbhit import *   # kbhit.pyをインポート
 import cv2
@@ -12,7 +12,7 @@ def main():
     set_curses_term()
 
     # Telloクラスを使って，droneというインスタンス(実体)を作る
-    drone = tello.Tello('', 8889) 
+    drone = tello_video.Tello('', 8889) 
 
 
     current_time = time.time()  # 現在時刻の保存変数
@@ -21,9 +21,7 @@ def main():
     #Ctrl+cが押されるまでループ
     try:
         while True:
-            frame = drone.read()
-            cv2.imshow('frame', frame)
-
+            
             if kbhit():     # 何かキーが押されるのを待つ
                 key = getch()   # 1文字取得
 
