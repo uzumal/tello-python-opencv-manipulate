@@ -5,10 +5,7 @@ import time           # time.sleepを使いたいので
 from kbhit import *   # kbhit.pyをインポート
 import socket
 
-HOST = '172.20.72.28'
-# HOST = '172.20.71.48'
-# HOST = '192.168.10.100'
-# HOST = '127.0.0.1'
+HOST = '###'
 PORT = 4602
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
